@@ -3,26 +3,31 @@ version 29
 
 __lua__
 function _init()
--- posición inicial de jugador
+-- posicion inicial de jugador
 player_x=64
-player_y=10 -- este valor va a ser fijo y no se verá afectado por movimiento
+player_y=110 -- este valor va a ser fijo y no se verれく afectado por movimiento
 end
 
 function _update()
 -- movimiento de jugador en eje x
-    if btn(1) then
-        cross_x+=1
+
+    if btn(➡️) and player_x<110 then
+        player_x+=2
     end
-    if btn(0) then
-            cross_x-=1
+    if btn(⬅️) and player_x>3 then
+        player_x-=2
     end
 end
 
 function _draw()
 cls()
+print("player x",10,10,3) --debug player x
+print(player_x,50,10,3)
 rect(0,0,127,127,1)
-rectfill(1,1,126,126,6)
-spr(1,cross_x,cross_y)
+spr(1,player_x,player_y)
+spr(2,player_x+8,player_y)
+spr(17,player_x,player_y+8)
+spr(18,player_x+8,player_y+8)
 end
 
 __gfx__
