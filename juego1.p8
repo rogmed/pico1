@@ -1,5 +1,6 @@
 pico-8 cartridge // http://www.pico-8.com
 version 29
+
 __lua__
 function _init()
 cross_x=63
@@ -8,16 +9,16 @@ end
 
 function _update()
     if btn(1) then
-        cross_x+=1
+        cross_x+=2
     end
     if btn(0) then
-        cross_x-=1
+        cross_x-=2
     end
     if btn(3) then
-        cross_y+=1
+        cross_y+=2
     end
     if btn(2) then
-        cross_y-=1
+        cross_y-=2
     end
 end
 
