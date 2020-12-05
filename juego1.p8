@@ -4,7 +4,7 @@ version 29
 __lua__
 function _init()
 cross_x=63
-cross_y=63
+cross_y=10
 end
 
 function _update()
@@ -13,12 +13,6 @@ function _update()
     end
     if btn(0) then
         cross_x-=2
-    end
-    if btn(3) then
-        cross_y+=2
-    end
-    if btn(2) then
-        cross_y-=2
     end
 end
 
