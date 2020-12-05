@@ -3,16 +3,18 @@ version 29
 
 __lua__
 function _init()
-cross_x=63
-cross_y=10
+-- posición inicial de jugador
+player_x=64
+player_y=10 -- este valor va a ser fijo y no se verá afectado por movimiento
 end
 
 function _update()
+-- movimiento de jugador en eje x
     if btn(1) then
-        cross_x+=2
+        cross_x+=1
     end
     if btn(0) then
-        cross_x-=2
+            cross_x-=1
     end
 end
 
