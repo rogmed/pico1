@@ -54,9 +54,10 @@ function _draw()
  print("score: ", 3,3,7)
  print(score, 30,3,8)
 	-- not equal to in lua ~= similar to !== in js
-	if score_message(score) ~= " " then
-  print(score_message(score),player.xpos - 19,player.ypos - 17,rnd(15)+1)
-  print(score_message(score),player.xpos - 20,player.ypos - 17,0)
+	msg = score_message(score)
+	if msg ~= " " then
+  print(msg,player.xpos - 19,player.ypos - 17,rnd(15)+1)
+  print(msg,player.xpos - 20,player.ypos - 17,0)
 	end
 
 end
