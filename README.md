@@ -26,6 +26,7 @@ Move your car with the left and right cursor keys
 * Score Counter
 * Life/Hit Counter
 * Miguelete Mode?
+* Host the game progress / releases in Github Pages
 
 
 ## Developed by
