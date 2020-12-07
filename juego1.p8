@@ -1,6 +1,8 @@
 pico-8 cartridge // http://www.pico-8.com
 version 29
 __lua__
+-- juego_1
+-- by rogelio y carlos
 function _init()
 -- posicion inicial de jugador
 player_x=64
