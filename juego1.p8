@@ -12,6 +12,7 @@ score      = 0
 map_y      = 0
 map_speed  = 1
 enemies = {}
+shake = 0
 
 for i = 0,1 do 
 	add_new_enemy()
@@ -37,6 +38,7 @@ end
 
 function _draw()
  cls()
+ meneito() 
  map(0,0,0,-map_y, 16, 17)
  map(0,0,0,-map_y-128, 16, 17)
  if debug_mode then show_debug() end
@@ -159,6 +161,7 @@ function is_colision()
 	and (enemy.xpos-8)<=player.xpos
  and player.xpos<=(enemy.xpos+8)
  then
+  shake += 1
   return true
  else
   return false
@@ -189,33 +192,77 @@ function score_message(score)
  -- returns a string
   msg = " "
   
-  if score >= 5  and score < 9 then
+  if score >= 12  and score < 16 then
    msg = "ostia, casi me mato"
+   map_speed = 2
   end
-  if score >= 19 and score < 22 then
+  if score >= 29 and score < 34 then
    msg = "yeah!"
+   map_speed = 2.5
+   add_new_enemy()
+   if count(enemies) > 3 then
+   	del(enemies,enemies[count(enemies)])
+   end
   end
   
-  if score >= 32 and score < 38 then
+  if score >= 41 and score < 44 then
    msg = "heh, not bad" 
+   map_speed = 3
+   add_new_enemy()
+   if count(enemies) > 4 then
+   	del(enemies,enemies[count(enemies)])
+   end
   end
   
-  if score >= 42  and score < 45 then
+  if score >= 62  and score < 67 then
    msg = "ˇ viva el vino ˇ"
+
+   map_speed = 3.7
+   add_new_enemy()
+   if count(enemies) > 5 then
+   	del(enemies,enemies[count(enemies)])
+   end   
+   
+   
   end
   
   
-  if score >= 54 and score < 57 then
+  if score >= 84 and score < 89 then
    msg = "sick! ★★★"
   end
 
-  if score >= 80  and score < 189 then
+  if score >= 100  and score < 189 then
    msg = "😐😐0x1fa3"
   end
+  
+  if score >= 130  and score < 289 then
+   map_speed = 5
+   add_new_enemy()
+   if count(enemies) > 8 then
+   	del(enemies,enemies[count(enemies)])
+   end   
+   
+  end  
+  
   
   return msg
       
 end
+
+function meneito()
+ local shake_x=3-rnd(6)
+ local shake_y=3-rnd(8)
+
+ -- apply the shake
+ shake_x *= shake
+ shake_y *= shake
+ camera(shake_x,shake_y)
+ 
+ -- fade out the shake
+ shake = shake * 0.93
+ if (shake<0.08) shake=0
+end
+
 __gfx__
 0000000000008778877800000000877887780000000087788778000033333333bbbbbbb77bbbbbbb7bbbbbbbbbbbbbb7bbbbbbb766666666000000000000d77d
 0000000000088888888880000008888888888000000888888888800033333333bbbbbbb77bbbbbbb7bbbbbbbbbbbbbb7bbbb3bb76666665600000000000ddddd
