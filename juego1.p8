@@ -208,7 +208,7 @@ function score_message(score)
    msg = "sick! ★★★"
   end
 
-  if score >= 80  and score < 89 then
+  if score >= 80  and score < 189 then
    msg = "😐😐0x1fa3"
   end
   
