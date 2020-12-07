@@ -5,8 +5,10 @@ __lua__
 -- by rogelio y carlos
 function _init()
 -- posicion inicial de jugador
-player_x=64
-player_y=110 -- este valor va a ser fijo y no se verれく afectado por movimiento
+player_x   = 64
+player_y   = 110 -- este valor va a ser fijo y no se verれく afectado por movimiento
+debug_mode = false
+
 end
 
 function _update()
@@ -21,24 +23,16 @@ function _update()
  enemy:update()
 end
 
+
 function _draw()
+--built in function
 cls()
-print("player x",10,10,3) --debug player x
-print(player_x,50,10,3)
-
-print(enemy.ypos,100,100,7)
-print(_colision(),100,120,7)
-
--- print("is colliding",10,20,3)
--- print(colision(),60,20,3)
+if debug_mode then show_debug() end
 
 rect(0,0,127,127,1)
 spr(1,player_x,player_y)
 spr(2,player_x+8,player_y)
 spr(17,player_x,player_y+8)
-
-print("enemy y pos",10,23,3)
-print(enemy.ypos,56,23,3)
 
 spr(18,player_x+8,player_y+8)
 
@@ -54,11 +48,13 @@ enemy = {
 	ypos= -10,
 
  update = function(self)
- self.ypos += 5
- if (self.ypos > 150) then
- 	self.ypos = -35
-		self.xpos = flr(rnd(100) +1)
- end
+ 	self.ypos += 5
+ 	
+	 if (is_colision() or self.ypos > 140 ) then
+	 	self.ypos = -35
+			self.xpos = flr(rnd(100) +1)
+	 end
+	 
  end,
  
  draw = function(self)
@@ -66,13 +62,13 @@ enemy = {
 		spr(self.sprite[1] +1 ,self.xpos +8 ,self.ypos)
 		spr(self.sprite[2],self.xpos,self.ypos + 8)
 		spr(self.sprite[2] +1 ,self.xpos + 8 ,self.ypos+8)
-
  end
 }
 -->8
 -- check colision
 
-function _colision()
+function is_colision()
+-- returns bool
 
 	if enemy.ypos > 100
 		and (enemy.xpos-8)<=player_x
@@ -83,6 +79,20 @@ function _colision()
      return false
 	end
 end
+
+function show_debug()
+	--prints debug information
+	print("player x",10,10,3)
+	print(player_x,50,10,3)
+	
+	print(enemy.ypos,100,100,7)
+	print(is_colision(),100,120,7)
+	
+	print("enemy y pos",10,23,3)
+	print(enemy.ypos,56,23,3)
+
+end
+
 __gfx__
 00000000000087788778000000008778877800000000877887780000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000888888888800000088888888880000008888888888000000000000000000000000000000000000000000000000000000000000000000000000000
