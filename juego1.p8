@@ -46,7 +46,7 @@ enemy:draw()
 end
 
 -->8
--- game object
+-- game objects
 
 enemy = {
  sprite = {46,62} ,
@@ -55,6 +55,10 @@ enemy = {
 
  update = function(self)
  self.ypos += 5
+ if (self.ypos > 150) then
+ 	self.ypos = -35
+		self.xpos = flr(rnd(100) +1)
+ end
  end,
  
  draw = function(self)
