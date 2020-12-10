@@ -9,8 +9,8 @@ debug_mode = true
 score      = 0
 lifes						= 3
 map_y      = 0
-map_speed  = 1
 enemies = {}
+enemies_speed = 3
 shake = 0
 gameover   = false
 
@@ -18,18 +18,16 @@ for i = 0,1 do
 	add_new_enemy()
 end
 
+map_speed=0.5+enemies[1].speed
+
 end
 
 function _update60()
  -- map stuff, put
  -- todo: put it in a function
- if not gameover then
-  map_y -= map_speed
- else
-  map_speed -= 0.01
-  if (map_speed<0.1) map_speed=0
-  map_y -= map_speed
- end
+ map_y -= map_speed
+ if (gameover) map_speed*=0.98
+ if (map_speed<0.1) map_speed=0
   
  if map_y <- 127 then map_y = 0 end
 
@@ -89,10 +87,12 @@ end
 -- game objects
 function add_new_enemy()
 	add(enemies, {
- 	sprite = {46,62} ,
+ 	sprite = {113,16},
+ 	width  = 14,
+ 	height = 16,
 		xpos   = flr(rnd(70) +22),
 		ypos   = flr(rnd(100) - 100),
- 	speed  = 3,	
+ 	speed  = enemies_speed,	
  	--speed  = flr(rnd(3) + 2),	
  	
  	update = function(self)
@@ -103,11 +103,9 @@ function add_new_enemy()
 				self.xpos  = flr(rnd(70) +22)
 				self.speed = flr(rnd(5) + 2) 
    	-- lose 1 heart
-    lifes -= 1
-    if lifes<0 then
-     lifes = 0
-     gameover = true
-    end 
+   	if (lifes==0) gameover=true
+    if (lifes>0) lifes-=1
+    
    	del(enemies,self)
    	add_new_enemy()
 	 	end
@@ -124,10 +122,12 @@ function add_new_enemy()
  	end,
  
  	draw = function(self)
-			spr(self.sprite[1],self.xpos,self.ypos)
-			spr(self.sprite[1] +1 ,self.xpos +8 ,self.ypos)
-			spr(self.sprite[2],self.xpos,self.ypos + 8)
-			spr(self.sprite[2] +1 ,self.xpos + 8 ,self.ypos+8)
+ 	 sspr(self.sprite[1],
+ 	     self.sprite[2],
+ 	     self.width,
+ 	     self.height,
+ 	     self.xpos,
+ 	     self.ypos)
  	end
 })
 end
@@ -135,9 +135,11 @@ end
 -- player car object
 
 player = {
- sprite = {9,0,14,16}, -- sprite corner x, corner y, width, height
- xpos = 64,  --initial xpos
- ypos = 110, --static ypos
+ sprite = {9,0}, -- sprite corner x, corner y, width, height
+ width  = 14,
+ height = 16,
+ xpos   = 64,  --initial xpos
+ ypos   = 110, --static ypos
  --colision = false, --currently unused
  
  update = function(self)
@@ -156,42 +158,56 @@ player = {
   if btn(➡️) then
   sspr(self.sprite[1]+16,
        self.sprite[2],
-       self.sprite[3],
-       self.sprite[4],
+       self.width,
+       self.height,
        self.xpos,self.ypos)
   elseif btn(⬅️) then
   sspr(self.sprite[1]+32,
        self.sprite[2],
-       self.sprite[3],
-       self.sprite[4],
+       self.width,
+       self.height,
        self.xpos,self.ypos)
   else
   sspr(self.sprite[1],
        self.sprite[2],
-       self.sprite[3],
-       self.sprite[4],
+       self.width,
+       self.height,
        self.xpos,self.ypos)
   end
+  
  end
 }
 
 -->8
 -- helper functions ♥♥
 
-function is_colision()
--- returns bool
+-- collision detection
+function lines_overlapping(min1,max1,min2,max2)
+	return max1>min2 and max2>min1
+end
 
+function rects_overlapping(left1,top1,right1,bottom1,left2,top2,right2,bottom2)
+	return lines_overlapping(left1,right1,left2,right2) and lines_overlapping(top1,bottom1,top2,bottom2)
+end
+
+function is_colision()
+ 
  for enemy in all(enemies) do
-		if enemy.ypos > 102
- and enemy.ypos < 134
-	and (enemy.xpos-8)<=player.xpos
- and player.xpos<=(enemy.xpos+8)
- then
-  shake += 1
-  return true
- else
-  return false
-	end
+		if rects_overlapping(
+		    enemy.xpos,
+		    enemy.ypos,
+		    enemy.xpos+enemy.width-1,
+		    enemy.ypos+enemy.height-1,
+		    player.xpos,
+      player.ypos,
+      player.xpos+player.width-1,
+      player.ypos+player.height-1)
+  then
+   shake += 1
+   return true
+  else
+   return false
+	 end
  end
 end
 
@@ -206,8 +222,22 @@ function show_debug()
 	 print(enemies[1].ypos,50,18,0)
 
 	 print("enemy speed: ",10,26,0)
-	 print(enemies[1].speed,60,26,0)
- end
+	 print(enemies_speed,60,26,0)
+
+  end
+  
+  -- shows player hitbox
+  rect(player.xpos,
+       player.ypos,
+       player.xpos+player.width-1,
+       player.ypos+player.height-1,8)
+  -- shows enemies hitbox
+  for enemy in all(enemies) do
+  rect(enemy.xpos,
+       enemy.ypos,
+       enemy.xpos+enemy.width-1,
+       enemy.ypos+enemy.height-1,8)
+  end
  -- is colliding?
 
 	 print(is_colision(),100,120,0)
@@ -220,11 +250,11 @@ function score_message(score)
   
   if score >= 12  and score < 16 then
    msg = "ostia, casi me mato"
-   map_speed = 2
+   enemies_speed=3
   end
   if score >= 29 and score < 34 then
    msg = "yeah!"
-   map_speed = 2.5
+   enemies_speed=2.5
    add_new_enemy()
    if count(enemies) > 3 then
    	del(enemies,enemies[count(enemies)])
@@ -233,7 +263,7 @@ function score_message(score)
   
   if score >= 41 and score < 44 then
    msg = "heh, not bad" 
-   map_speed = 3
+   enemies_speed=3
    add_new_enemy()
    if count(enemies) > 4 then
    	del(enemies,enemies[count(enemies)])
@@ -243,7 +273,7 @@ function score_message(score)
   if score >= 62  and score < 67 then
    msg = "ˇ viva el vino ˇ"
 
-   map_speed = 3.7
+   enemies_speed=3.7
    add_new_enemy()
    if count(enemies) > 5 then
    	del(enemies,enemies[count(enemies)])
@@ -262,7 +292,7 @@ function score_message(score)
   end
   
   if score >= 130  and score < 289 then
-   map_speed = 5
+   enemies_speed=5
    add_new_enemy()
    if count(enemies) > 8 then
    	del(enemies,enemies[count(enemies)])
