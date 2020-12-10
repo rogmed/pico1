@@ -1,7 +1,7 @@
 # pico1
 Juego con Chals
 
-![Progress So far](https://i.imgur.com/utYhxeV)
+![Progress So far](https://i.imgur.com/utYhxeV.gif)
 Progress So far
 
 ![Wario Ware Inc](https://i.imgur.com/If3D6BI.png "Wario Ware Inc. Avoid the traffic")
